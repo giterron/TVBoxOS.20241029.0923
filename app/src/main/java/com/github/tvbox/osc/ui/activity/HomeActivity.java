@@ -659,4 +659,32 @@ public class HomeActivity extends BaseActivity {
             dialog.show();
         }
     }
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_home);
+
+    // 模拟初始化任务
+    performInitialization();
+}
+
+private void performInitialization() {
+    new Thread(() -> {
+        try {
+            // 模拟任务，例如读取配置或初始化操作
+            Thread.sleep(2000); // 模拟任务耗时
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // 启动 LivePlayActivity，不关闭 HomeActivity
+        runOnUiThread(() -> {
+            Intent intent = new Intent(HomeActivity.this, LivePlayActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 保证在新任务栈中启动
+            startActivity(intent);
+        });
+    }).start();
+}
+    
 }
